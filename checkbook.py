@@ -20,7 +20,9 @@ else:
         transactions = json.load(f)
         balance = sum(list(float(i['amount']) for i in transactions))
             
-
+def save_change(transact):
+    with open('ledger.json','w') as f:
+        json.dump(transact,f)
 
 def menu1(bal):
 
@@ -55,9 +57,7 @@ def menu3(bal):
             print('\t\t', deposit, 'is not a valid amount.')
 
 def menu4(transact):
-
-    with open('ledger.json','w') as f:
-        json.dump(transact,f)
+    save_change(transact)
 
 
 while True:  
@@ -79,11 +79,13 @@ while True:
     elif menu_option == '2':
         # Take from balance
         balance = menu2(balance)
+        save_change(transactions)
         print('\t\t','*'*10,f'Your new balance is ${balance:,.2f}.')
         
     elif menu_option == '3':
         # Add to balance
         balance = menu3(balance)
+        save_change(transactions)
         print('\t\t','*'*10,f'Your new balance is ${balance:,.2f}.')
         
     elif menu_option == '4':
