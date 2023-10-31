@@ -8,13 +8,18 @@ Created on Mon Oct 30 13:41:11 2023
 # Import libraries and define functions
 import os
 import subprocess
+import json
+import datetime as dt
 
 # Open the balance file or create it if it doesn't exist
-if 'balances.txt' not in os.listdir():
+if 'ledger.json' not in os.listdir():
     balance = 0
+    transactions = []
 else:
-    with open('balances.txt','r') as f:
-        balance = float(f.readline())
+    with open('ledger.json','r') as f:
+        transactions = json.load(f)
+        balance = sum(list(float(i['amount']) for i in transactions))
+            
 
 
 def menu1(bal):
@@ -25,8 +30,12 @@ def menu2(bal):
 
     while True:
         withdraw = input('Enter the amount you wish to withdraw: ')
-        
+
         try:
+            transactions.append({
+                'time':f'{dt.datetime.now()}',
+                'amount':f'-{withdraw}'
+                })
             return bal - float(withdraw)
         except:
             print('\t\t', withdraw,'is not a valid amount.')
@@ -37,14 +46,18 @@ def menu3(bal):
         deposit = input('Enter the amount you wish to deposit: ')
         
         try:
+            transactions.append({
+                'time':f'{dt.datetime.now()}',
+                'amount':f'{deposit}'
+                })
             return bal + float(deposit)
         except:
             print('\t\t', deposit, 'is not a valid amount.')
 
-def menu4(bal):
+def menu4(transact):
 
-    with open('balances.txt','w') as f:
-        f.write(str(bal))
+    with open('ledger.json','w') as f:
+        json.dump(transact,f)
 
 
 while True:  
@@ -75,7 +88,7 @@ while True:
         
     elif menu_option == '4':
         # Exit program and write balance
-        menu4(balance)
+        menu4(transactions)
         print('Goodbye!')
         break
     
@@ -85,7 +98,7 @@ while True:
         print('WARNING: KILLING BALANCE RECORD'.center(100))
         print(f'ENDING BALANCE: ${balance:,.2f}'.center(100))
         print(('='*50).center(100))
-        os.remove('balances.txt')
+        os.remove('ledger.json')
         break
     
     else:
