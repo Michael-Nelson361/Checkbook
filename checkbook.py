@@ -18,9 +18,11 @@ else:
 
 
 def menu1(bal):
+
     print('\t\t','*'*10,f'Your current balance is: ${bal:,.2f}')
 
 def menu2(bal):
+
     while True:
         withdraw = input('Enter the amount you wish to withdraw: ')
         
@@ -30,6 +32,7 @@ def menu2(bal):
             print('\t\t', withdraw,'is not a valid amount.')
 
 def menu3(bal):
+
     while True:
         deposit = input('Enter the amount you wish to deposit: ')
         
@@ -39,6 +42,7 @@ def menu3(bal):
             print('\t\t', deposit, 'is not a valid amount.')
 
 def menu4(bal):
+
     with open('balances.txt','w') as f:
         f.write(str(bal))
 
@@ -52,19 +56,29 @@ while True:
               3) Submit deposit
               4) Quit
           """)
-    menu_option = input('\rEnter a menu option: ')
+    menu_option = input('\tEnter a menu option: ')
     
     # Call the option defined
     if menu_option == '1':
+        # Check current balance
         menu1(balance)
+        
     elif menu_option == '2':
+        # Take from balance
         balance = menu2(balance)
+        print('\t\t','*'*10,f'Your new balance is ${balance:,.2f}.')
+        
     elif menu_option == '3':
+        # Add to balance
         balance = menu3(balance)
+        print('\t\t','*'*10,f'Your new balance is ${balance:,.2f}.')
+        
     elif menu_option == '4':
+        # Exit program and write balance
         menu4(balance)
         print('Goodbye!')
         break
+    
     # SECRET MENU OPTION
     elif menu_option == '1812':
         print(('='*50).center(100))
@@ -73,5 +87,6 @@ while True:
         print(('='*50).center(100))
         os.remove('balances.txt')
         break
+    
     else:
         print('Input invalid')
